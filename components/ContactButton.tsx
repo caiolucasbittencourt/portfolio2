@@ -14,7 +14,7 @@ export default function ContactButton({ onClick }: { onClick: () => void }) {
       exit={{ scale: 0, opacity: 0 }}
       transition={{ duration: 0.3, type: "spring", stiffness: 300, damping: 20 }}
     >
-      Contact
+      CLICK ME!
     </motion.div>
   );
 }

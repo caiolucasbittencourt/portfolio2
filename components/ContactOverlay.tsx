@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, Variants } from "framer-motion";
+import { useState, useEffect } from "react";
 
 const overlayVariants: Variants = {
   hidden: {
@@ -18,54 +19,107 @@ const contentVariants: Variants = {
   visible: {
     opacity: 1,
     transition: {
-      delayChildren: 0.5,
-      staggerChildren: 0.3,
+      delayChildren: 1.2,
     },
   },
 };
 
-const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 15, scale: 0.98 },
+const paragraphVariants: Variants = {
+  hidden: {
+    opacity: 0,
+  },
   visible: {
     opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: { duration: 0.8, ease: [0.86, 0, 0.07, 1] as const },
+    transition: {
+      duration: 2.5,
+      ease: "easeOut",
+    },
   },
 };
 
 export default function ContactOverlay({ onClose }: { onClose: () => void }) {
+  const originalTitle = "Hello, I'm Caio.";
+  
+  const [typedTitle, setTypedTitle] = useState("");
+  const [blinkingEmoticon, setBlinkingEmoticon] = useState(";) ");
+  const [isTypingComplete, setIsTypingComplete] = useState(false);
+
+  useEffect(() => {
+    if (typedTitle.length < originalTitle.length) {
+      const timeout = setTimeout(() => {
+        setTypedTitle(originalTitle.slice(0, typedTitle.length + 1));
+      }, 120);
+      return () => clearTimeout(timeout);
+    } else {
+      setIsTypingComplete(true);
+    }
+  }, [typedTitle]);
+
+  useEffect(() => {
+    if (isTypingComplete) {
+      const interval = setInterval(() => {
+        setBlinkingEmoticon((prev) => (prev === ";) " ? ":) " : ";) "));
+      }, 800);
+      return () => clearInterval(interval);
+    }
+  }, [isTypingComplete]);
+
+  const linkStyles =
+    "font-semibold relative inline-block text-black transition-colors duration-900 hover:text-black " +
+    "after:content-[''] after:absolute after:bottom-[-2px] after:left-0 after:h-[1px] after:w-full " +
+    "after:bg-black after:origin-left after:scale-x-0 hover:after:scale-x-100 " +
+    "after:transition-transform after:duration-900 after:ease-out " +
+    "!cursor-none";
+
   return (
     <motion.div
       onClick={onClose}
-      className="fixed inset-0 bg-orange-500 z-40 flex justify-center items-center flex-col p-8 overflow-y-auto cursor-pointer"
-      variants={overlayVariants} // Agora está corretamente tipado
+      className="fixed inset-0 bg-orange-500 z-40 flex justify-center items-center flex-col p-8 overflow-y-auto"
+      variants={overlayVariants}
       initial="hidden"
       animate="visible"
       exit="hidden"
     >
       <motion.div
         onClick={(e) => e.stopPropagation()}
-        className="text-center text-white max-w-4xl cursor-default"
+        className="text-left text-black max-w-4xl w-full cursor-none"
         variants={contentVariants}
         initial="hidden"
         animate="visible"
         exit="hidden"
       >
-        <motion.h1 variants={itemVariants} className="text-5xl md:text-7xl font-bold mb-4">
-          Vamos Conversar.
-        </motion.h1>
-        <motion.p variants={itemVariants} className="text-lg md:text-2xl mb-4 font-light">
-          Estou sempre aberto a novos desafios e colaborações. Se você tem um projeto em mente, uma ideia para discutir ou apenas quer dizer olá, sinta-se à vontade para me contatar.
-        </motion.p>
-        <motion.p variants={itemVariants} className="text-lg md:text-2xl mb-8 font-light">
-          Acredito que uma boa comunicação é a chave para o sucesso. Vamos criar algo incrível juntos.
-        </motion.p>
-        <motion.div variants={itemVariants} className="text-xl md:text-3xl font-semibold">
-          <a href="mailto:caio.bittencourt.dev@gmail.com" className="hover:underline">
-            caio.bittencourt.dev@gmail.com
+        <h1 className="text-5xl md:text-7xl font-bold mb-4">
+          <span>{typedTitle}</span>
+          {!isTypingComplete && <span className="animate-ping">|</span>}
+          {isTypingComplete && <span> {blinkingEmoticon}</span>}
+        </h1>
+
+        <motion.p
+          initial="hidden"
+          animate={isTypingComplete ? "visible" : "hidden"}
+          variants={paragraphVariants}
+          className="text-lg md:text-2xl font-light"
+        >
+          I'm a front-end developer and UX/UI designer specializing in building dynamic and beautiful web applications. My toolkit is centered around{" "}
+          <strong className="font-semibold text-black/90">React</strong> and its powerful framework,{" "}
+          <strong className="font-semibold text-black/90">Next.js</strong>. I write robust, scalable code with{" "}
+          <strong className="font-semibold text-black/90">TypeScript</strong> and design pixel-perfect, responsive layouts using{" "}
+          <strong className="font-semibold text-black/90">Tailwind CSS</strong>. While my focus is on the front-end, I'm also comfortable using{" "}
+          <strong className="font-semibold text-black/90">Node.js</strong> for server-side logic. You can see my work on{" "}
+          <a href="https://github.com/caiolucasbittencourt" target="_blank" rel="noopener noreferrer" className={linkStyles}>
+            GitHub
           </a>
-        </motion.div>
+          , connect with me on{" "}
+          <a href="https://www.linkedin.com/in/caiolucasbittencourt/" target="_blank" rel="noopener noreferrer" className={linkStyles}>
+            LinkedIn
+          </a>
+          , or reach out directly via{" "}
+          <a href="mailto:caiolucasbittencourt@hotmail.com" className={linkStyles}>
+            e-mail
+          </a>
+          .
+        </motion.p>
+        
       </motion.div>
     </motion.div>
   );
