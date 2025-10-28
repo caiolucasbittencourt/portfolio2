@@ -1,8 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 
-const overlayVariants = {
+const overlayVariants: Variants = {
   hidden: {
     clipPath: "circle(40px at calc(100% - 60px) calc(100% - 60px))",
     transition: { type: "spring", stiffness: 400, damping: 40 },
@@ -13,7 +13,7 @@ const overlayVariants = {
   },
 };
 
-const contentVariants = {
+const contentVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -24,7 +24,7 @@ const contentVariants = {
   },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 15, scale: 0.98 },
   visible: {
     opacity: 1,
@@ -39,7 +39,7 @@ export default function ContactOverlay({ onClose }: { onClose: () => void }) {
     <motion.div
       onClick={onClose}
       className="fixed inset-0 bg-orange-500 z-40 flex justify-center items-center flex-col p-8 overflow-y-auto cursor-pointer"
-      variants={overlayVariants}
+      variants={overlayVariants} // Agora está corretamente tipado
       initial="hidden"
       animate="visible"
       exit="hidden"
