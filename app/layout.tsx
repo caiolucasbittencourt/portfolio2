@@ -4,7 +4,7 @@ import CustomCursor from "@/components/CustomCursor";
 import { CursorProvider } from "@/context/CursorContext";
 
 export const metadata: Metadata = {
-  title: "Reactive - Our Process",
+  title: "Portfolio",
   description: "Interactive process visualization built with Next.js + TailwindCSS",
 };
 
