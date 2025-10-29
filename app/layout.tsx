@@ -16,7 +16,7 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <CursorProvider>
-        <body className="bg-black text-white font-[Poppins] overflow-hidden">
+        <body className="bg-black text-white font-[Poppins] overflow-hidden"> {/* AQUI */}
           <CustomCursor />
           {children}
         </body>
