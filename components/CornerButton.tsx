@@ -12,7 +12,12 @@ export default function ContactButton({ onClick }: { onClick: () => void }) {
       initial={{ scale: 0, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       exit={{ scale: 0, opacity: 0 }}
-      transition={{ duration: 0.3, type: "spring", stiffness: 300, damping: 20 }}
+      transition={{
+        duration: 0.3,
+        type: "spring",
+        stiffness: 300,
+        damping: 20,
+      }}
     >
       CLICK ME!
     </motion.div>

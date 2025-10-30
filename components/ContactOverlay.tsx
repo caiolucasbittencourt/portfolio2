@@ -3,15 +3,23 @@
 import { motion, Variants } from "framer-motion";
 import { useState, useEffect } from "react";
 
-const overlayVariants: Variants = {
-  hidden: {
-    clipPath: "circle(40px at calc(100% - 60px) calc(100% - 60px))",
-    transition: { type: "spring", stiffness: 400, damping: 40 },
-  },
-  visible: {
-    clipPath: "circle(150vmax at calc(100% - 60px) calc(100% - 60px))",
-    transition: { type: "spring", stiffness: 80, damping: 20 },
-  },
+const getOverlayVariants = (isMobile: boolean): Variants => {
+  const position = isMobile
+    ? "50% calc(100% - 65px)"
+    : "calc(100% - 110px) calc(100% - 110px)";
+
+  const initialRadius = isMobile ? "45px" : "60px";
+
+  return {
+    hidden: {
+      clipPath: `circle(${initialRadius} at ${position})`,
+      transition: { type: "spring", stiffness: 400, damping: 40 },
+    },
+    visible: {
+      clipPath: `circle(150vmax at ${position})`,
+      transition: { type: "spring", stiffness: 80, damping: 20 },
+    },
+  };
 };
 
 const contentVariants: Variants = {
@@ -25,24 +33,29 @@ const contentVariants: Variants = {
 };
 
 const paragraphVariants: Variants = {
-  hidden: {
-    opacity: 0,
-  },
-  visible: {
-    opacity: 1,
-    transition: {
-      duration: 2.5,
-      ease: "easeOut",
-    },
-  },
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 2.5, ease: "easeOut" } },
 };
 
 export default function ContactOverlay({ onClose }: { onClose: () => void }) {
   const originalTitle = "Hello, I'm Caio.";
-  
+
   const [typedTitle, setTypedTitle] = useState("");
   const [blinkingEmoticon, setBlinkingEmoticon] = useState(";) ");
   const [isTypingComplete, setIsTypingComplete] = useState(false);
+
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth < 768;
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   useEffect(() => {
     if (typedTitle.length < originalTitle.length) {
@@ -75,7 +88,7 @@ export default function ContactOverlay({ onClose }: { onClose: () => void }) {
     <motion.div
       onClick={onClose}
       className="fixed inset-0 bg-orange-500 z-40 flex justify-center items-center flex-col p-8 overflow-y-auto"
-      variants={overlayVariants}
+      variants={getOverlayVariants(isMobile)}
       initial="hidden"
       animate="visible"
       exit="hidden"
@@ -88,7 +101,7 @@ export default function ContactOverlay({ onClose }: { onClose: () => void }) {
         animate="visible"
         exit="hidden"
       >
-        <h1 className="text-5xl md:text-7xl font-bold mb-4">
+        <h1 className="text-3xl md:text-7xl font-bold mb-4">
           <span>{typedTitle}</span>
           {!isTypingComplete && <span className="animate-ping">|</span>}
           {isTypingComplete && <span> {blinkingEmoticon}</span>}
@@ -100,26 +113,44 @@ export default function ContactOverlay({ onClose }: { onClose: () => void }) {
           variants={paragraphVariants}
           className="text-lg md:text-2xl font-light"
         >
-          I'm a front-end developer and UX/UI designer specializing in building dynamic and beautiful web applications. My toolkit is centered around{" "}
-          <strong className="font-semibold text-black/90">React</strong> and its powerful framework,{" "}
-          <strong className="font-semibold text-black/90">Next.js</strong>. I write robust, scalable code with{" "}
-          <strong className="font-semibold text-black/90">TypeScript</strong> and design pixel-perfect, responsive layouts using{" "}
-          <strong className="font-semibold text-black/90">Tailwind CSS</strong>. While my focus is on the front-end, I'm also comfortable using{" "}
-          <strong className="font-semibold text-black/90">Node.js</strong> for server-side logic. You can see my work on{" "}
-          <a href="https://github.com/caiolucasbittencourt" target="_blank" rel="noopener noreferrer" className={linkStyles}>
+          I'm a front-end developer and UX/UI designer specializing in building
+          dynamic and beautiful web applications. My toolkit is centered around{" "}
+          <strong className="font-semibold text-black/90">React</strong> and its
+          powerful framework,{" "}
+          <strong className="font-semibold text-black/90">Next.js</strong>. I
+          write robust, scalable code with{" "}
+          <strong className="font-semibold text-black/90">TypeScript</strong>{" "}
+          and design pixel-perfect, responsive layouts using{" "}
+          <strong className="font-semibold text-black/90">Tailwind CSS</strong>.
+          While my focus is on the front-end, I'm also comfortable using{" "}
+          <strong className="font-semibold text-black/90">Node.js</strong> for
+          server-side logic. You can see my work on{" "}
+          <a
+            href="https://github.com/caiolucasbittencourt"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={linkStyles}
+          >
             GitHub
           </a>
           , connect with me on{" "}
-          <a href="https://www.linkedin.com/in/caiolucasbittencourt/" target="_blank" rel="noopener noreferrer" className={linkStyles}>
+          <a
+            href="https://www.linkedin.com/in/caiolucasbittencourt/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={linkStyles}
+          >
             LinkedIn
           </a>
           , or reach out directly via{" "}
-          <a href="mailto:caiolucasbittencourt@hotmail.com" className={linkStyles}>
+          <a
+            href="mailto:caiolucasbittencourt@hotmail.com"
+            className={linkStyles}
+          >
             e-mail
           </a>
           .
         </motion.p>
-        
       </motion.div>
     </motion.div>
   );
