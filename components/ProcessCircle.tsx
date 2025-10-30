@@ -2,40 +2,51 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 const CENTER = 300;
 const RADIUS = 260;
 
-const stepsData = [
+const techStackData = [
   {
     angle: -90,
-    title: "Discovery",
+    title: "React",
     description:
-      "I dive deep into your project to really understand your goals, audience, and market, building a strong foundation before moving forward.",
+      "I use React to build dynamic and component-based user interfaces, creating interactive and seamless web experiences.",
+    logo: "./react.svg",
+    logoAlt: "React Logo",
   },
   {
     angle: -18,
-    title: "UX/UI Design",
+    title: "Next.js",
     description:
-      "I create clear wireframes and beautiful visual designs that make the user experience smooth, engaging, and enjoyable.",
+      "I leverage Next.js on top of React to develop fast, SEO-friendly applications with server-side rendering and static site generation.",
+    logo: "./nextjs.svg",
+    logoAlt: "Next.js Logo",
   },
   {
     angle: 54,
-    title: "Development",
+    title: "TypeScript",
     description:
-      "I bring the designs to life with clean, efficient code, making sure everything runs fast and looks great on any device.",
+      "I use TypeScript to add static typing to my projects, ensuring more robust, maintainable, and error-free code.",
+    logo: "./typescript.svg",
+    logoAlt: "TypeScript Logo",
   },
   {
     angle: 126,
-    title: "Testing & QA",
+    title: "Node.js",
     description:
-      "I carefully test everything on multiple devices to make sure it all works perfectly and runs without bugs.",
+      "On the server-side, I utilize Node.js to build fast and scalable APIs, connecting the frontend to data and services.",
+    logo: "./nodejs.svg",
+    logoAlt: "Node.js Logo",
   },
   {
     angle: 198,
-    title: "Deployment",
+    title: "Tailwind CSS",
     description:
-      "I take care of the launch process and provide ongoing support to keep things running smoothly over time.",
+      "For styling, I use Tailwind CSS, a utility-first framework that allows me to rapidly build modern and responsive designs directly in my markup.",
+    logo: "./tailwindcss.svg",
+    logoAlt: "Tailwind CSS Logo",
   },
 ];
 
@@ -75,7 +86,7 @@ export default function ProcessCircle() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentStepIndex((prev) => {
-        if (prev >= stepsData.length - 1) {
+        if (prev >= techStackData.length - 1) {
           setIsResetting(true);
           return 0;
         } else {
@@ -87,7 +98,7 @@ export default function ProcessCircle() {
     return () => clearInterval(interval);
   }, []);
 
-  const step = stepsData[currentStepIndex];
+  const step = techStackData[currentStepIndex];
   const elegantEase = [0.86, 0, 0.07, 1] as const;
   const smoothTransition = { duration: 1.2, ease: elegantEase };
 
@@ -109,11 +120,11 @@ export default function ProcessCircle() {
           cx={CENTER}
           cy={CENTER}
         />
-        {stepsData.map((_, index) => {
-          const startAngle = stepsData[index].angle;
-          const endAngle = stepsData[index + 1]
-            ? stepsData[index + 1].angle
-            : stepsData[0].angle;
+        {techStackData.map((_, index) => {
+          const startAngle = techStackData[index].angle;
+          const endAngle = techStackData[index + 1]
+            ? techStackData[index + 1].angle
+            : techStackData[0].angle;
           return (
             <motion.path
               key={index}
@@ -134,7 +145,7 @@ export default function ProcessCircle() {
         })}
       </svg>
       <div className="absolute w-full h-full">
-        {stepsData.map((s, index) => {
+        {techStackData.map((s, index) => {
           const { x, y } = polarToCartesian(CENTER, CENTER, RADIUS, s.angle);
           return (
             <motion.div
@@ -171,8 +182,17 @@ export default function ProcessCircle() {
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.8, ease: elegantEase }}
           >
-            <p className="text-xs md:text-sm text-white/60 mb-1 md:mb-2 tracking-wide font-light">
-              MY PROCESS - STEP {currentStepIndex + 1}
+            <p className="text-xs md:text-sm text-white/60 mb-1 md:mb-2 tracking-wide font-light flex items-center justify-center gap-2">
+              MY TECH STACK
+              {step.logo && (
+                <Image
+                  src={step.logo}
+                  alt={step.logoAlt}
+                  width={20}
+                  height={20}
+                  className="inline-block"
+                />
+              )}
             </p>
             <h1 className="text-4xl md:text-[60px] font-semibold leading-tight mb-2 md:mb-4">
               {step.title}
