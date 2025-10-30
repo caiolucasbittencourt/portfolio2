@@ -4,8 +4,11 @@ import CustomCursor from "@/components/CustomCursor";
 import { CursorProvider } from "@/context/CursorContext";
 
 export const metadata: Metadata = {
-  title: "Portfolio",
-  description: "Interactive process visualization built with Next.js + TailwindCSS",
+  title: "Caio Bittencourt | Front-end Developer",
+  description: "",
+  icons: {
+    icon: "./favicon.svg",
+  },
 };
 
 export default function RootLayout({
@@ -15,12 +18,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-br">
-      <CursorProvider>
-        <body className="bg-black text-white font-[Poppins] overflow-hidden"> {/* AQUI */}
+      <body className="bg-black text-white font-[Poppins] overflow-hidden">
+        <CursorProvider>
           <CustomCursor />
           {children}
-        </body>
-      </CursorProvider>
+        </CursorProvider>
+      </body>
     </html>
   );
 }
