@@ -1,53 +1,73 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
+
+function useInterval(callback: () => void, delay: number | null) {
+  const savedCallback = useRef<(() => void) | undefined>(undefined);
+
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  useEffect(() => {
+    function tick() {
+      savedCallback.current?.();
+    }
+    if (delay !== null) {
+      const id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
+}
 
 const CENTER = 300;
 const RADIUS = 260;
+const ANIMATION_DURATION = 8500;
+const RESET_ANIMATION_DURATION = 800;
 
 const techStackData = [
-  {
-    angle: -90,
-    title: "React",
-    description:
-      "I use React to build dynamic and component-based user interfaces, creating interactive and seamless web experiences.",
-    logo: "./react.svg",
-    logoAlt: "React Logo",
-  },
-  {
-    angle: -18,
-    title: "Next.js",
-    description:
-      "I leverage Next.js on top of React to develop fast, SEO-friendly applications with server-side rendering and static site generation.",
-    logo: "./nextjs.svg",
-    logoAlt: "Next.js Logo",
-  },
-  {
-    angle: 54,
-    title: "TypeScript",
-    description:
-      "I use TypeScript to add static typing to my projects, ensuring more robust, maintainable, and error-free code.",
-    logo: "./typescript.svg",
-    logoAlt: "TypeScript Logo",
-  },
-  {
-    angle: 126,
-    title: "Node.js",
-    description:
-      "On the server-side, I utilize Node.js to build fast and scalable APIs, connecting the frontend to data and services.",
-    logo: "./nodejs.svg",
-    logoAlt: "Node.js Logo",
-  },
-  {
-    angle: 198,
-    title: "Tailwind CSS",
-    description:
-      "For styling, I use Tailwind CSS, a utility-first framework that allows me to rapidly build modern and responsive designs directly in my markup.",
-    logo: "./tailwindcss.svg",
-    logoAlt: "Tailwind CSS Logo",
-  },
+    {
+        angle: -90,
+        title: "React",
+        description:
+          "I use React to build dynamic and component-based user interfaces, creating interactive and seamless web experiences.",
+        logo: "./react.svg",
+        logoAlt: "React Logo",
+      },
+      {
+        angle: -18,
+        title: "Next.js",
+        description:
+          "I leverage Next.js on top of React to develop fast, SEO-friendly applications with server-side rendering and static site generation.",
+        logo: "./nextjs.svg",
+        logoAlt: "Next.js Logo",
+      },
+      {
+        angle: 54,
+        title: "TypeScript",
+        description:
+          "I use TypeScript to add static typing to my projects, ensuring more robust, maintainable, and error-free code.",
+        logo: "./typescript.svg",
+        logoAlt: "TypeScript Logo",
+      },
+      {
+        angle: 126,
+        title: "Node.js",
+        description:
+          "On the server-side, I utilize Node.js to build fast and scalable APIs, connecting the frontend to data and services.",
+        logo: "./nodejs.svg",
+        logoAlt: "Node.js Logo",
+      },
+      {
+        angle: 198,
+        title: "Tailwind CSS",
+        description:
+          "For styling, I use Tailwind CSS, a utility-first framework that allows me to rapidly build modern and responsive designs directly in my markup.",
+        logo: "./tailwindcss.svg",
+        logoAlt: "Tailwind CSS Logo",
+      },
 ];
 
 function polarToCartesian(
@@ -81,26 +101,33 @@ function describeArc(
 
 export default function ProcessCircle() {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const [loopCount, setLoopCount] = useState(0);
   const [isResetting, setIsResetting] = useState(false);
+  const [isRunning, setIsRunning] = useState(true);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentStepIndex((prev) => {
-        if (prev >= techStackData.length - 1) {
-          setIsResetting(true);
-          return 0;
-        } else {
+  useInterval(
+    () => {
+      const isLastStep = currentStepIndex === techStackData.length - 1;
+
+      if (isLastStep) {
+        setIsRunning(false);
+        setIsResetting(true);
+
+        setTimeout(() => {
+          setLoopCount((count) => count + 1);
+          setCurrentStepIndex(0);
           setIsResetting(false);
-          return prev + 1;
-        }
-      });
-    }, 4500);
-    return () => clearInterval(interval);
-  }, []);
+          setIsRunning(true);
+        }, RESET_ANIMATION_DURATION);
+      } else {
+        setCurrentStepIndex((prev) => prev + 1);
+      }
+    },
+    isRunning ? ANIMATION_DURATION : null
+  );
 
   const step = techStackData[currentStepIndex];
   const elegantEase = [0.86, 0, 0.07, 1] as const;
-  const smoothTransition = { duration: 1.2, ease: elegantEase };
 
   return (
     <div className="relative w-[90vw] h-[90vw] md:w-[600px] md:h-[600px] flex justify-center items-center overflow-hidden">
@@ -127,18 +154,22 @@ export default function ProcessCircle() {
             : techStackData[0].angle;
           return (
             <motion.path
-              key={index}
+              key={`${loopCount}-${index}`}
               d={describeArc(CENTER, CENTER, RADIUS, startAngle, endAngle)}
               fill="none"
               stroke="#f97316"
               strokeWidth="3"
               strokeLinecap="round"
               initial={{ pathLength: 0 }}
-              animate={{ pathLength: index < currentStepIndex ? 1 : 0 }}
+              animate={{
+                pathLength: isResetting ? 0 : index <= currentStepIndex ? 1 : 0,
+              }}
               transition={
                 isResetting
-                  ? { duration: 0.4, ease: "easeOut" }
-                  : smoothTransition
+                  ? { duration: RESET_ANIMATION_DURATION / 1000, ease: "easeOut" }
+                  : index === currentStepIndex
+                  ? { duration: ANIMATION_DURATION / 1000, ease: "linear" }
+                  : { duration: 0.5, ease: "easeOut" }
               }
             />
           );
@@ -149,7 +180,7 @@ export default function ProcessCircle() {
           const { x, y } = polarToCartesian(CENTER, CENTER, RADIUS, s.angle);
           return (
             <motion.div
-              key={index}
+              key={`${loopCount}-${index}-dot`}
               className="absolute w-[20px] h-[20px] rounded-full"
               style={{
                 left: `${(x / 600) * 100}%`,
@@ -157,15 +188,19 @@ export default function ProcessCircle() {
                 x: "-50%",
                 y: "-50%",
               }}
+              initial={{
+                backgroundColor: "rgba(255, 255, 255, 0.2)",
+                boxShadow: "none",
+              }}
               animate={{
                 backgroundColor:
-                  index <= currentStepIndex
-                    ? "#f97316"
-                    : "rgba(255, 255, 255, 0.2)",
+                  isResetting || index > currentStepIndex
+                    ? "rgba(255, 255, 255, 0.2)"
+                    : "#f97316",
                 boxShadow:
-                  index <= currentStepIndex
-                    ? "0 0 16px rgba(249,115,22,0.8)"
-                    : "none",
+                  isResetting || index > currentStepIndex
+                    ? "none"
+                    : "0 0 16px rgba(249,115,22,0.8)",
               }}
               transition={{ duration: 0.5, ease: "easeOut" }}
             />
