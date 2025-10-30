@@ -218,7 +218,7 @@ export default function ProcessCircle() {
             transition={{ duration: 0.8, ease: elegantEase }}
           >
             <p className="text-xs md:text-sm text-white/60 mb-1 md:mb-2 tracking-wide font-light flex items-center justify-center gap-2">
-              MY TECH STACK
+              Powered by
               {step.logo && (
                 <Image
                   src={step.logo}
