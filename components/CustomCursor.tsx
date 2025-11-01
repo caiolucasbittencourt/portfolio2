@@ -25,7 +25,7 @@ export default function CustomCursor() {
       animate={{ 
         x: position.x - 12, 
         y: position.y - 12,
-        backgroundColor: isBlack ? "#000000" : "#f97316"
+        backgroundColor: isBlack ? "#000000" : "#ffffff"
       }}
       transition={{ 
         type: "spring", 

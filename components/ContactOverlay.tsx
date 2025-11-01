@@ -87,7 +87,7 @@ export default function ContactOverlay({ onClose }: { onClose: () => void }) {
   return (
     <motion.div
       onClick={onClose}
-      className="fixed inset-0 bg-orange-500 z-40 flex justify-center items-center flex-col p-8 overflow-y-auto"
+      className="fixed inset-0 bg-white z-40 flex justify-center items-center flex-col p-8 overflow-y-auto"
       variants={getOverlayVariants(isMobile)}
       initial="hidden"
       animate="visible"
@@ -113,7 +113,7 @@ export default function ContactOverlay({ onClose }: { onClose: () => void }) {
           variants={paragraphVariants}
           className="text-lg md:text-2xl font-light"
         >
-          I'm a front-end developer and UX/UI designer specializing in building
+          I'm a front-end developer specializing in building
           dynamic and beautiful web applications. My toolkit is centered around{" "}
           <strong className="font-semibold text-black/90">React</strong> and its
           powerful framework,{" "}

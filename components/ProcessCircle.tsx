@@ -24,50 +24,50 @@ function useInterval(callback: () => void, delay: number | null) {
 
 const CENTER = 300;
 const RADIUS = 260;
-const ANIMATION_DURATION = 8500;
+const ANIMATION_DURATION = 5500;
 const RESET_ANIMATION_DURATION = 800;
 
 const techStackData = [
-    {
-        angle: -90,
-        title: "React",
-        description:
-          "I use React to build dynamic and component-based user interfaces, creating interactive and seamless web experiences.",
-        logo: "./react.svg",
-        logoAlt: "React Logo",
-      },
-      {
-        angle: -18,
-        title: "Next.js",
-        description:
-          "I leverage Next.js on top of React to develop fast, SEO-friendly applications with server-side rendering and static site generation.",
-        logo: "./nextjs.svg",
-        logoAlt: "Next.js Logo",
-      },
-      {
-        angle: 54,
-        title: "TypeScript",
-        description:
-          "I use TypeScript to add static typing to my projects, ensuring more robust, maintainable, and error-free code.",
-        logo: "./typescript.svg",
-        logoAlt: "TypeScript Logo",
-      },
-      {
-        angle: 126,
-        title: "Node.js",
-        description:
-          "On the server-side, I utilize Node.js to build fast and scalable APIs, connecting the frontend to data and services.",
-        logo: "./nodejs.svg",
-        logoAlt: "Node.js Logo",
-      },
-      {
-        angle: 198,
-        title: "Tailwind CSS",
-        description:
-          "For styling, I use Tailwind CSS, a utility-first framework that allows me to rapidly build modern and responsive designs directly in my markup.",
-        logo: "./tailwindcss.svg",
-        logoAlt: "Tailwind CSS Logo",
-      },
+  {
+    angle: -90,
+    title: "React",
+    description:
+      "I use React to build dynamic and component-based user interfaces, creating interactive and seamless web experiences.",
+    logo: "./react.svg",
+    logoAlt: "React Logo",
+  },
+  {
+    angle: -18,
+    title: "Next.js",
+    description:
+      "I leverage Next.js on top of React to develop fast, SEO-friendly applications with server-side rendering and static site generation.",
+    logo: "./nextjs.svg",
+    logoAlt: "Next.js Logo",
+  },
+  {
+    angle: 54,
+    title: "TypeScript",
+    description:
+      "I use TypeScript to add static typing to my projects, ensuring more robust, maintainable, and error-free code.",
+    logo: "./typescript.svg",
+    logoAlt: "TypeScript Logo",
+  },
+  {
+    angle: 126,
+    title: "Node.js",
+    description:
+      "On the server-side, I utilize Node.js to build fast and scalable APIs, connecting the frontend to data and services.",
+    logo: "./nodejs.svg",
+    logoAlt: "Node.js Logo",
+  },
+  {
+    angle: 198,
+    title: "Tailwind CSS",
+    description:
+      "For styling, I use Tailwind CSS, a utility-first framework that allows me to rapidly build modern and responsive designs directly in my markup.",
+    logo: "./tailwindcss.svg",
+    logoAlt: "Tailwind CSS Logo",
+  },
 ];
 
 function polarToCartesian(
@@ -157,7 +157,7 @@ export default function ProcessCircle() {
               key={`${loopCount}-${index}`}
               d={describeArc(CENTER, CENTER, RADIUS, startAngle, endAngle)}
               fill="none"
-              stroke="#f97316"
+              stroke="#ffffff"
               strokeWidth="3"
               strokeLinecap="round"
               initial={{ pathLength: 0 }}
@@ -196,11 +196,11 @@ export default function ProcessCircle() {
                 backgroundColor:
                   isResetting || index > currentStepIndex
                     ? "rgba(255, 255, 255, 0.2)"
-                    : "#f97316",
+                    : "#ffffff",
                 boxShadow:
                   isResetting || index > currentStepIndex
                     ? "none"
-                    : "0 0 16px rgba(249,115,22,0.8)",
+                    : "0 0 16px rgba(255, 255, 255, 0.8)",
               }}
               transition={{ duration: 0.5, ease: "easeOut" }}
             />
