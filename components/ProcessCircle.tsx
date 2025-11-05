@@ -2,7 +2,6 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState, useRef } from "react";
-import Image from "next/image";
 
 function useInterval(callback: () => void, delay: number | null) {
   const savedCallback = useRef<(() => void) | undefined>(undefined);
@@ -27,46 +26,36 @@ const RADIUS = 260;
 const ANIMATION_DURATION = 5500;
 const RESET_ANIMATION_DURATION = 800;
 
-const techStackData = [
+const processSteps = [
   {
     angle: -90,
-    title: "React",
+    title: "UX/UI",
     description:
-      "I use React to build dynamic and component-based user interfaces, creating interactive and seamless web experiences.",
-    logo: "./react.svg",
-    logoAlt: "React Logo",
+      "Começo pelo porquê. Entendo o problema, crio wireframes e protótipos, e defino o fluxo do usuário para garantir uma base sólida.",
   },
   {
     angle: -18,
-    title: "Next.js",
+    title: "Code",
     description:
-      "I leverage Next.js on top of React to develop fast, SEO-friendly applications with server-side rendering and static site generation.",
-    logo: "./nextjs.svg",
-    logoAlt: "Next.js Logo",
+      "Traduzo o design em código. Construo componentes reutilizáveis e uma arquitetura limpa, focando na semântica e acessibilidade.",
   },
   {
     angle: 54,
-    title: "TypeScript",
+    title: "RWD",
     description:
-      "I use TypeScript to add static typing to my projects, ensuring more robust, maintainable, and error-free code.",
-    logo: "./typescript.svg",
-    logoAlt: "TypeScript Logo",
+      "Garanto que a experiência seja perfeita em qualquer tela. Adiciono micro-interações e animações que dão vida à interface.",
   },
   {
     angle: 126,
-    title: "Node.js",
+    title: "Integration",
     description:
-      "On the server-side, I utilize Node.js to build fast and scalable APIs, connecting the frontend to data and services.",
-    logo: "./nodejs.svg",
-    logoAlt: "Node.js Logo",
+      "Conecto a aplicação a dados. Seja um banco de dados ou uma API, eu torno a interface dinâmica e funcional.",
   },
   {
     angle: 198,
-    title: "Tailwind CSS",
+    title: "Deploy",
     description:
-      "For styling, I use Tailwind CSS, a utility-first framework that allows me to rapidly build modern and responsive designs directly in my markup.",
-    logo: "./tailwindcss.svg",
-    logoAlt: "Tailwind CSS Logo",
+      "Otimizo a performance, realizo testes finais de usabilidade e publico a aplicação, garantindo uma entrega rápida e estável.",
   },
 ];
 
@@ -107,7 +96,7 @@ export default function ProcessCircle() {
 
   useInterval(
     () => {
-      const isLastStep = currentStepIndex === techStackData.length - 1;
+      const isLastStep = currentStepIndex === processSteps.length - 1;
 
       if (isLastStep) {
         setIsRunning(false);
@@ -126,7 +115,7 @@ export default function ProcessCircle() {
     isRunning ? ANIMATION_DURATION : null
   );
 
-  const step = techStackData[currentStepIndex];
+  const step = processSteps[currentStepIndex];
   const elegantEase = [0.86, 0, 0.07, 1] as const;
 
   return (
@@ -147,11 +136,11 @@ export default function ProcessCircle() {
           cx={CENTER}
           cy={CENTER}
         />
-        {techStackData.map((_, index) => {
-          const startAngle = techStackData[index].angle;
-          const endAngle = techStackData[index + 1]
-            ? techStackData[index + 1].angle
-            : techStackData[0].angle;
+        {processSteps.map((_, index) => {
+          const startAngle = processSteps[index].angle;
+          const endAngle = processSteps[index + 1]
+            ? processSteps[index + 1].angle
+            : processSteps[0].angle;
           return (
             <motion.path
               key={`${loopCount}-${index}`}
@@ -176,7 +165,7 @@ export default function ProcessCircle() {
         })}
       </svg>
       <div className="absolute w-full h-full">
-        {techStackData.map((s, index) => {
+        {processSteps.map((s, index) => {
           const { x, y } = polarToCartesian(CENTER, CENTER, RADIUS, s.angle);
           return (
             <motion.div
@@ -208,7 +197,7 @@ export default function ProcessCircle() {
         })}
       </div>
 
-      <div className="text-center max-w-[80%] md:max-w-[450px] flex flex-col justify-center min-h-[150px] overflow-hidden">
+      <div className="text-center max-w-[70%] md:max-w-[450px] flex flex-col justify-center min-h-[150px] overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentStepIndex}
@@ -217,22 +206,15 @@ export default function ProcessCircle() {
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.8, ease: elegantEase }}
           >
-            <p className="text-xs md:text-sm text-white/60 mb-1 md:mb-2 tracking-wide font-light flex items-center justify-center gap-2">
-              Powered by
-              {step.logo && (
-                <Image
-                  src={step.logo}
-                  alt={step.logoAlt}
-                  width={20}
-                  height={20}
-                  className="inline-block"
-                />
-              )}
+            <p className="text-xs md:text-sm text-white/60 mb-1 md:mb-2 tracking-wide font-light flex items-center justify-center gap-2 uppercase">
+              MY PROCESS - STEP {currentStepIndex + 1}/5
             </p>
-            <h1 className="text-4xl md:text-[60px] font-semibold leading-tight mb-2 md:mb-4">
+            
+            <h1 className="text-3xl md:text-5xl font-semibold leading-tight mb-2 md:mb-4 text-balance">
               {step.title}
             </h1>
-            <p className="text-sm md:text-[17px] leading-relaxed text-white/80 font-light">
+            
+            <p className="text-sm md:text-base leading-relaxed text-white/80 font-light text-balance">
               {step.description}
             </p>
           </motion.div>
